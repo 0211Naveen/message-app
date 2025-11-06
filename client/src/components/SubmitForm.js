@@ -12,7 +12,10 @@ const SubmitForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post("http://localhost:5000/api/messages", formData);
+        console.log("API URL:", process.env.REACT_APP_API_URL);
+
+      await axios.post(`${process.env.REACT_APP_API_URL}/api/messages/save`, formData);
+      
       setStatus("✅ Message saved successfully!");
       setFormData({ name: "", message: "" });
     } catch (error) {
