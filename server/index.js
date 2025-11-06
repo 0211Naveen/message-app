@@ -27,17 +27,44 @@ connectDB();
 const app = express();
 app.use(express.json());
 
-// ✅ Allow only specific frontend URLs
-const allowedOrigins = [
-  process.env.CLIENT_URL,               // for localhost
-  process.env.PRODUCTION_CLIENT_URL     // for deployed frontend
-].filter(Boolean); // remove undefined values
+// // ✅ Allow only specific frontend URLs
+// const allowedOrigins = [
+//   process.env.CLIENT_URL,               // for localhost
+//   process.env.PRODUCTION_CLIENT_URL     // for deployed frontend
+// ].filter(Boolean); // remove undefined values
 
-app.use(cors({
-  origin: allowedOrigins,
-  methods: ["GET", "POST", "PUT", "DELETE"],
-  credentials: true
-}));
+// app.use(cors({
+//   origin: allowedOrigins,
+//   methods: ["GET", "POST", "PUT", "DELETE"],
+//   credentials: true
+// }));
+
+
+// ✅ Allowed frontend URLs
+const allowedOrigins = [
+  process.env.CLIENT_URL,               // localhost frontend
+  process.env.PRODUCTION_CLIENT_URL     // Vercel frontend
+].filter(Boolean);
+
+// ✅ CORS Middleware (Fix for Vercel)
+app.use((req, res, next) => {
+  const origin = req.headers.origin;
+  if (allowedOrigins.includes(origin)) {
+    res.header("Access-Control-Allow-Origin", origin);
+  }
+  res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+  res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
+  res.header("Access-Control-Allow-Credentials", "true");
+
+  // ✅ Handle preflight OPTIONS requests
+  if (req.method === "OPTIONS") {
+    return res.sendStatus(200);
+  }
+
+  next();
+});
+
+
 
 // ✅ Routes
 app.use("/api/messages", require("./routes/messageRoutes"));
