@@ -7,7 +7,7 @@ const App = () => {
   return (
     <Router>
       <div style={{ padding: "20px" }}>
-        <nav style={{ marginBottom: "20px"}}>
+        <nav style={{ marginBottom: "20px", textAlign: "center", }}>
           <Link to="/" style={{ marginRight: "15px" }}>Submit Message</Link>
           <Link to="/messages">View Messages</Link>
         </nav>
