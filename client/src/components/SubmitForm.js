@@ -80,7 +80,7 @@ const SubmitForm = () => {
       setStatus("Message sent successfully!");
       setFormData({ name: "", message: "" });
     } catch (error) {
-    setStatus("Failed to send message");
+      setStatus("Failed to send message");
       console.error(error);
     } finally {
       setIsLoading(false);
@@ -93,7 +93,7 @@ const SubmitForm = () => {
         <h2>Submit Your Message</h2>
         <p>We'd love to hear from you!</p>
 
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} className="message-form">
           <div className="input-wrapper">
             <input
               type="text"
@@ -102,6 +102,7 @@ const SubmitForm = () => {
               onChange={handleChange}
               required
               placeholder=" "
+              autoComplete="off"
             />
             <label>Name</label>
           </div>
@@ -114,6 +115,7 @@ const SubmitForm = () => {
               required
               rows="4"
               placeholder=" "
+              autoComplete="off"
             />
             <label>Message</label>
           </div>
@@ -130,27 +132,39 @@ const SubmitForm = () => {
         )}
       </div>
 
-      {/* EXACT MOBILE + DESKTOP DESIGN */}
+      {/* 100% OVERFLOW FIXED + MOBILE PERFECT */}
       <style jsx>{`
+        * {
+          box-sizing: border-box;
+        }
+
         .submit-page {
           min-height: 100vh;
           background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
           display: flex;
           align-items: center;
           justify-content: center;
-          padding: 20px;
+          padding: 16px;
           font-family: 'Segoe UI', sans-serif;
+          overflow-x: hidden;
         }
 
         .form-popup {
           background: white;
           border-radius: 28px;
-          padding: 40px 32px;
+          padding: 36px 28px;
           width: 100%;
           max-width: 420px;
           box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
           position: relative;
           animation: floatIn 0.8s ease-out;
+          margin: 0 auto;
+        }
+
+        .message-form {
+          display: flex;
+          flex-direction: column;
+          gap: 20px;
         }
 
         .form-popup h2 {
@@ -167,28 +181,29 @@ const SubmitForm = () => {
           text-align: center;
           color: #666;
           font-size: 16px;
-          margin: 0 0 32px 0;
+          margin: 0 0 28px 0;
         }
 
         .input-wrapper {
           position: relative;
-          margin-bottom: 24px;
+          width: 100%;
         }
 
         .input-wrapper input,
         .input-wrapper textarea {
           width: 100%;
-          padding: 16px 20px;
+          padding: 16px 18px;
           border: 2px solid #e0e0e0;
           border-radius: 16px;
           font-size: 16px;
           background: #f8f9fa;
           transition: all 0.3s ease;
+          resize: none;
+          outline: none;
         }
 
         .input-wrapper input:focus,
         .input-wrapper textarea:focus {
-          outline: none;
           border-color: #667eea;
           background: white;
           box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.15);
@@ -197,13 +212,14 @@ const SubmitForm = () => {
         .input-wrapper label {
           position: absolute;
           top: 16px;
-          left: 20px;
+          left: 18px;
           color: #999;
           font-size: 16px;
           pointer-events: none;
           transition: all 0.3s ease;
           background: white;
-          padding: 0 8px;
+          padding: 0 6px;
+          font-weight: 500;
         }
 
         .input-wrapper input:focus ~ label,
@@ -211,7 +227,7 @@ const SubmitForm = () => {
         .input-wrapper input:not(:placeholder-shown) ~ label,
         .input-wrapper textarea:not(:placeholder-shown) ~ label {
           top: -10px;
-          left: 16px;
+          left: 14px;
           font-size: 13px;
           color: #667eea;
           font-weight: 600;
@@ -229,25 +245,26 @@ const SubmitForm = () => {
           cursor: pointer;
           transition: all 0.3s ease;
           box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+          margin-top: 8px;
         }
 
         .send-btn:hover:not(:disabled) {
-          transform: translateY(-4px);
+          transform: translateY(-3px);
           box-shadow: 0 15px 35px rgba(102, 126, 234, 0.4);
         }
 
         .send-btn:disabled {
           opacity: 0.7;
           cursor: not-allowed;
-          transform: none;
         }
 
         .status {
-          margin-top: 20px;
+          margin-top: 16px;
           text-align: center;
-          padding: 12px;
+          padding: 12px 16px;
           border-radius: 12px;
           font-weight: 600;
+          font-size: 15px;
         }
 
         .status.success {
@@ -265,7 +282,7 @@ const SubmitForm = () => {
         @keyframes floatIn {
           from {
             opacity: 0;
-            transform: translateY(50px) scale(0.9);
+            transform: translateY(40px) scale(0.95);
           }
           to {
             opacity: 1;
@@ -273,18 +290,17 @@ const SubmitForm = () => {
           }
         }
 
-        /* Mobile Perfect Match */
+        /* MOBILE FIX - NO OVERFLOW! */
         @media (max-width: 480px) {
           .submit-page {
-            padding: 15px;
-            align-items: flex-start;
+            padding: 12px;
             padding-top: 10vh;
           }
 
           .form-popup {
             border-radius: 24px;
-            padding: 32px 24px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            padding: 32px 20px;
+            max-width: 100%;
           }
 
           .form-popup h2 {
@@ -293,14 +309,35 @@ const SubmitForm = () => {
 
           .input-wrapper input,
           .input-wrapper textarea {
-            padding: 14px 18px;
+            padding: 14px 16px;
             border-radius: 14px;
+            font-size: 16px !important;
+          }
+
+          .input-wrapper label {
+            left: 16px;
+            font-size: 15px;
+          }
+
+          .input-wrapper input:focus ~ label,
+          .input-wrapper textarea:focus ~ label,
+          .input-wrapper input:not(:placeholder-shown) ~ label,
+          .input-wrapper textarea:not(:placeholder-shown) ~ label {
+            left: 12px;
+            font-size: 12.5px;
           }
 
           .send-btn {
             padding: 16px;
             font-size: 17px;
           }
+        }
+
+        /* Extra safety - prevent any overflow */
+        input, textarea {
+          -webkit-appearance: none;
+          -moz-appearance: none;
+          appearance: none;
         }
       `}</style>
     </div>
